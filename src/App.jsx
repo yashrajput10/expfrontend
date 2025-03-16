@@ -124,12 +124,20 @@ const App = () => {
           EXP Stock
         </h2>
         <button
+          onClick={() => setActiveSection("form")}
+          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
+            activeSection === "form" ? "bg-pink-800 text-white" : ""
+          }`}
+        >
+          Add Invoice
+        </button>
+        <button
           onClick={() => setActiveSection("table")}
           className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
             activeSection === "table" ? "bg-pink-800 text-white" : ""
           }`}
         >
-          Invoice Data
+          View Invoices
         </button>
         <button
           onClick={() => setActiveSection("chart")}
@@ -147,22 +155,21 @@ const App = () => {
         >
           Expired Invoice Chart
         </button>
+        
         <button
-          onClick={() => setActiveSection("form")}
+          onClick={() => setActiveSection("calendar")}
           className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
-            activeSection === "form" ? "bg-pink-800 text-white" : ""
+            activeSection === "calendar" ? "bg-pink-800 text-white" : ""
           }`}
         >
-          Add Invoice
+          Expiry Calendar
         </button>
       </div>
-
-      <div className="flex-grow p-6 max-w-4xl box-border animation-fadeIn  bg-pink-400">
+      <div className="flex-grow p-6 max-w-4xl box-border animation-fadeIn bg-pink-400">
         <h1 className="text-2xl font-extrabold text-white mb-6 text-center">
           EXP STOCK MANAGEMENT
         </h1>
 
-        {/* Add Search Bar Here */}
         {activeSection === "table" && (
           <div className="mb-4">
             <input
@@ -180,7 +187,7 @@ const App = () => {
             <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
-                <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
                     Item Name
                   </th>
                   <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
@@ -189,7 +196,6 @@ const App = () => {
                   <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
                     Date
                   </th>
-                  
                   <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
                     Price
                   </th>
@@ -228,10 +234,7 @@ const App = () => {
                       <td className="py-2 px-2 text-center ">
                         {formatDate(invoice.invoiceDate)}
                       </td>
-                      
-                      <td className="py-2 px-2 text-center ">
-                        ₹{invoice.price}
-                      </td>
+                      <td className="py-2 px-2 text-center ">{`₹${invoice.price}`}</td>
                       <td className="py-2 px-2 text-center ">
                         {formatDate(invoice.expiryDate)}
                       </td>
@@ -268,6 +271,26 @@ const App = () => {
           </div>
         )}
 
+        {activeSection === "calendar" && (
+          <div className="bg-white shadow-lg p-6">
+            <h2 className="text-2xl font-bold text-pink-700 mb-4">
+              Invoice Expiry Calendar
+            </h2>
+            <Calendar
+              localizer={localizer}
+              events={invoices.map((invoice) => ({
+                title: `${invoice.itemName} - ₹${invoice.price}`,
+                start: new Date(invoice.expiryDate),
+                end: new Date(invoice.expiryDate),
+                allDay: true,
+              }))}
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: 500 }}
+            />
+          </div>
+        )}
+
         {activeSection === "chart" && (
           <div className="bg-white shadow-lg mb-12 p-6">
             <h2 className="text-2xl font-bold text-pink-700 mb-4">
@@ -289,9 +312,7 @@ const App = () => {
         {activeSection === "form" && (
           <div className="bg-white shadow-lg p-6 max-w-l mx-auto">
             <form onSubmit={addInvoice}>
-              <h2 className="text-2xl font-bold text-pink-700">
-                Add Invoice
-              </h2>
+              <h2 className="text-2xl font-bold text-pink-700">Add Invoice</h2>
               <div className="mb-2">
                 <label className="block text-pink-700 mb-2">Invoice No</label>
                 <input
@@ -374,8 +395,7 @@ const App = () => {
           </div>
         )}
       </div>
-
-      <ToastContainer />
+      <ToastContainer /> {/* Toastify Container */}
     </div>
   );
 };
