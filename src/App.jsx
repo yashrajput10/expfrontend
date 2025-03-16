@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
@@ -69,24 +69,34 @@ const App = () => {
   const isExpiredOrAboutToExpire = (expiryDate) => {
     const currentTime = new Date();
     const expiryTime = new Date(expiryDate);
-    return expiryTime <= currentTime || (expiryTime - currentTime <= 24 * 60 * 60 * 1000 && expiryTime > currentTime);
+    return (
+      expiryTime <= currentTime ||
+      (expiryTime - currentTime <= 24 * 60 * 60 * 1000 &&
+        expiryTime > currentTime)
+    );
   };
 
-  const expiredInvoices = invoices.filter((invoice) => new Date(invoice.expiryDate) < new Date());
+  const expiredInvoices = invoices.filter(
+    (invoice) => new Date(invoice.expiryDate) < new Date()
+  );
 
   const chartData = {
     labels: invoices.map((invoice) => formatDate(invoice.invoiceDate)),
     datasets: [
       {
         label: "Done Invoices (₹)",
-        data: invoices.filter((invoice) => invoice.done).map((invoice) => invoice.price),
+        data: invoices
+          .filter((invoice) => invoice.done)
+          .map((invoice) => invoice.price),
         backgroundColor: "rgba(24, 246, 4, 0.5)",
         borderColor: "rgb(8, 250, 77)",
         borderWidth: 1,
       },
       {
         label: "Pending Invoices (₹)",
-        data: invoices.filter((invoice) => !invoice.done).map((invoice) => invoice.price),
+        data: invoices
+          .filter((invoice) => !invoice.done)
+          .map((invoice) => invoice.price),
         backgroundColor: "rgba(255, 0, 0, 0.5)",
         borderColor: "rgb(114, 0, 0)",
         borderWidth: 1,
@@ -108,125 +118,170 @@ const App = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6 bg-pink-200 flex">
-      <div className="w-1/4 bg-pink-400 text-white p-4 flex flex-col">
-        <h2 className="text-3xl font-bold mb-6">EXP Stock</h2>
+    <div className="flex flex-wrap justify-between p-5 bg-white gap-6 max-w-7xl mx-auto">
+      <div className="bg-pink-400 text-white p-4 w-64  shadow-lg transition-all flex-shrink-0">
+        <h2 className="text-xl font-semibold text-center mb-4 tracking-wider">
+          EXP Stock
+        </h2>
         <button
           onClick={() => setActiveSection("table")}
-          className={`p-2 mb-4 rounded-md ${activeSection === "table" ? "bg-pink-800" : "bg-pink-500 hover:bg-pink-600"}`}
+          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+            activeSection === "table" ? "bg-pink-800 text-white" : ""
+          }`}
         >
           Invoice Data
         </button>
         <button
           onClick={() => setActiveSection("chart")}
-          className={`p-2 mb-4 rounded-md ${activeSection === "chart" ? "bg-pink-800" : "bg-pink-500 hover:bg-pink-600"}`}
+          className={`p-3 mb-4 w-full bg-pink-200 text-black  rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+            activeSection === "chart" ? "bg-pink-800 text-white" : ""
+          }`}
         >
           Invoice Price Trends
         </button>
         <button
           onClick={() => setActiveSection("expired")}
-          className={`p-2 mb-4 rounded-md ${activeSection === "expired" ? "bg-pink-800" : "bg-pink-500 hover:bg-pink-600"}`}
+          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+            activeSection === "expired" ? "bg-pink-800 text-white" : ""
+          }`}
         >
           Expired Invoice Chart
         </button>
         <button
           onClick={() => setActiveSection("form")}
-          className={`p-2 rounded-md ${activeSection === "form" ? "bg-pink-800" : "bg-pink-500 hover:bg-pink-600"}`}
+          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+            activeSection === "form" ? "bg-pink-800 text-white" : ""
+          }`}
         >
           Add Invoice
         </button>
       </div>
 
-      <div className="w-3/4 p-6 space-y-6">
-        <h1 className="text-4xl font-bold text-center text-pink-700 mb-6">
+      <div className="flex-grow p-6 max-w-4xl box-border animation-fadeIn  bg-pink-400">
+        <h1 className="text-2xl font-extrabold text-white mb-6 text-center">
           EXP STOCK MANAGEMENT
         </h1>
 
         {activeSection === "table" && (
-          <div className="bg-white shadow-lg rounded-lg p-16">
-            <div className="overflow-y-auto max-h-96">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-pink-500 text-white border-b text-center">
-                    <th className="p-4 font-semibold">Invoice No</th>
-                    <th className="p-4 font-semibold">Date</th>
-                    <th className="p-4 font-semibold">Item Name</th>
-                    <th className="p-4 font-semibold">Price</th>
-                    <th className="p-4 font-semibold">Expiry Date</th>
-                    <th className="p-4 font-semibold">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {invoices
-                    .filter(
-                      (invoice) =>
-                        invoice.itemName.toLowerCase().includes(search.toLowerCase()) ||
-                        invoice.invoiceDate.includes(search)
-                    )
-                    .map((invoice) => (
-                      <tr
-                        key={invoice._id}
-                        className={`border-t hover:bg-pink-100 ${
-                          isExpiredOrAboutToExpire(invoice.expiryDate) ? "bg-red-500 text-white" : ""
-                        }`}
-                      >
-                        <td className="p-4">{invoice.invoiceNumber}</td>
-                        <td className="p-4">{formatDate(invoice.invoiceDate)}</td>
-                        <td className="p-4">{invoice.itemName}</td>
-                        <td className="p-4">₹{invoice.price}</td>
-                        <td className="p-4">{formatDate(invoice.expiryDate)}</td>
-                        <td className="p-4 flex space-x-2">
-                          <button
-                            onClick={() => toggleDoneStatus(invoice._id)}
-                            className={`p-2 rounded-lg text-white transition-colors duration-200 ${
-                              invoice.done ? "bg-green-500 hover:bg-green-600" : "bg-gray-500 hover:bg-gray-600"
-                            }`}
-                          >
-                            {invoice.done ? "Done" : "Pending"}
-                          </button>
-                          <button
-                            className="bg-black text-white p-2 rounded-lg transition-colors duration-200 hover:bg-red-600"
-                            onClick={() => {
-                              if (window.confirm("Are you sure you want to delete this invoice?")) {
-                                deleteInvoice(invoice._id);
-                              }
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="bg-white shadow-lg p-2  max-h-136 overflow-y-auto border border-gray-100">
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr>
+                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                    Invoice No
+                  </th>
+                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                    Date
+                  </th>
+                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                    Item Name
+                  </th>
+                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                    Price
+                  </th>
+                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                    Expiry Date
+                  </th>
+                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {invoices
+                  .filter(
+                    (invoice) =>
+                      invoice.itemName
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                      invoice.invoiceDate.includes(search)
+                  )
+                  .map((invoice) => (
+                    <tr
+                      key={invoice._id}
+                      className={
+                        isExpiredOrAboutToExpire(invoice.expiryDate)
+                          ? "bg-red-600 text-white border-2"
+                          : ""
+                      }
+                    >
+                      <td className="py-2 px-2 text-center ">
+                        {invoice.invoiceNumber}
+                      </td>
+                      <td className="py-2 px-2 text-center ">
+                        {formatDate(invoice.invoiceDate)}
+                      </td>
+                      <td className="py-2 px-2 text-center ">
+                        {invoice.itemName}
+                      </td>
+                      <td className="py-2 px-2 text-center ">
+                        ₹{invoice.price}
+                      </td>
+                      <td className="py-2 px-2 text-center ">
+                        {formatDate(invoice.expiryDate)}
+                      </td>
+                      <td className="py-2 px-2 text-center  flex space-x-2">
+                        <button
+                          onClick={() => toggleDoneStatus(invoice._id)}
+                          className={`px-4 py-2 text-white font-semibold rounded-md ${
+                            invoice.done
+                              ? "bg-green-600 hover:bg-green-700"
+                              : "bg-[#a8a29e] hover:bg-red-700"
+                          }`}
+                        >
+                          {invoice.done ? "Done" : "Pending"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                "Are you sure you want to delete this invoice?"
+                              )
+                            ) {
+                              deleteInvoice(invoice._id);
+                            }
+                          }}
+                          className="px-4 py-2 text-white font-semibold rounded-md bg-black hover:bg-gray-700"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
         )}
 
         {activeSection === "chart" && (
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-pink-700 mb-4">Invoice Price Trends</h2>
+          <div className="bg-white shadow-lg mb-12 p-6">
+            <h2 className="text-2xl font-bold text-pink-700 mb-4">
+              Invoice Price Trends
+            </h2>
             <Bar data={chartData} />
           </div>
         )}
 
         {activeSection === "expired" && (
-          <div className="bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-2xl font-semibold text-pink-700 mb-4">Expired Invoice Price Trends</h2>
+          <div className="bg-white mb-14 shadow-lg  p-6">
+            <h2 className="text-l font-bold text-white mb-4">
+              Expired Invoice Price Trends
+            </h2>
             <Bar data={chartDataExpired} />
           </div>
         )}
 
         {activeSection === "form" && (
-          <div className="bg-white shadow-lg rounded-lg p-4">
-            <form onSubmit={addInvoice} className="space-y-4">
-              <h2 className="text-2xl font-semibold text-pink-700 mb-4">Add Invoice</h2>
-              <div>
-                <label className="block text-xl text-pink-700">Invoice No</label>
+          <div className="bg-white shadow-lg p-6 max-w-l mx-auto">
+            <form onSubmit={addInvoice}>
+              <h2 className="text-2xl font-bold text-pink-700">
+                Add Invoice
+              </h2>
+              <div className="mb-2">
+                <label className="block text-pink-700 mb-2">Invoice No</label>
                 <input
                   type="text"
                   placeholder="Invoice Number"
-                  className="border p-2 w-full rounded-md focus:ring-2 focus:ring-pink-500"
                   value={invoiceData.invoiceNumber}
                   onChange={(e) =>
                     setInvoiceData({
@@ -235,61 +290,68 @@ const App = () => {
                     })
                   }
                   required
+                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
               </div>
-              <div>
-                <label className="block text-xl text-pink-700">Invoice Date</label>
+              <div className="mb-2">
+                <label className="block text-pink-700 mb-2">Invoice Date</label>
                 <input
                   type="date"
-                  className="border p-2 w-full rounded-md focus:ring-2 focus:ring-pink-500"
                   value={invoiceData.invoiceDate}
                   onChange={(e) =>
-                    setInvoiceData({ ...invoiceData, invoiceDate: e.target.value })
+                    setInvoiceData({
+                      ...invoiceData,
+                      invoiceDate: e.target.value,
+                    })
                   }
                   required
+                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
               </div>
-              <div>
-                <label className="block text-xl text-pink-700">Item Name</label>
+              <div className="mb-2">
+                <label className="block text-pink-700 mb-2">Item Name</label>
                 <input
                   type="text"
                   placeholder="Item Name"
-                  className="border p-2 w-full rounded-md focus:ring-2 focus:ring-pink-500"
                   value={invoiceData.itemName}
                   onChange={(e) =>
                     setInvoiceData({ ...invoiceData, itemName: e.target.value })
                   }
                   required
+                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
               </div>
-              <div>
-                <label className="block text-xl text-pink-700">Price</label>
+              <div className="mb-2">
+                <label className="block text-pink-700 mb-2">Price</label>
                 <input
                   type="number"
                   placeholder="Price"
-                  className="border p-2 w-full rounded-md focus:ring-2 focus:ring-pink-500"
                   value={invoiceData.price}
                   onChange={(e) =>
                     setInvoiceData({ ...invoiceData, price: e.target.value })
                   }
                   required
+                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
               </div>
-              <div>
-                <label className="block text-xl text-pink-700">Expiry Date</label>
+              <div className="mb-6">
+                <label className="block text-pink-700 mb-2">Expiry Date</label>
                 <input
                   type="date"
-                  className="border p-2 w-full rounded-md focus:ring-2 focus:ring-pink-500"
                   value={invoiceData.expiryDate}
                   onChange={(e) =>
-                    setInvoiceData({ ...invoiceData, expiryDate: e.target.value })
+                    setInvoiceData({
+                      ...invoiceData,
+                      expiryDate: e.target.value,
+                    })
                   }
                   required
+                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600"
+                className="w-full py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 focus:outline-none"
               >
                 Add Invoice
               </button>
@@ -298,7 +360,6 @@ const App = () => {
         )}
       </div>
 
-      {/* Toast container for the notifications */}
       <ToastContainer />
     </div>
   );
