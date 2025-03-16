@@ -118,6 +118,8 @@ const App = () => {
   };
 
   return (
+    <>
+    <div class="spinner"></div>
     <div className="flex flex-wrap justify-between p-5 bg-white gap-6 max-w-7xl mx-auto">
       <div className="bg-pink-400 text-white p-4 w-64  shadow-lg transition-all flex-shrink-0">
         <h2 className="text-xl font-semibold text-center mb-4 tracking-wider">
@@ -397,6 +399,7 @@ const App = () => {
       </div>
       <ToastContainer /> {/* Toastify Container */}
     </div>
+    </>
   );
 };
 
