@@ -125,7 +125,7 @@ const App = () => {
         </h2>
         <button
           onClick={() => setActiveSection("table")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
             activeSection === "table" ? "bg-pink-800 text-white" : ""
           }`}
         >
@@ -133,7 +133,7 @@ const App = () => {
         </button>
         <button
           onClick={() => setActiveSection("chart")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black  rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+          className={`p-3 mb-4 w-full bg-pink-200 text-black  rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
             activeSection === "chart" ? "bg-pink-800 text-white" : ""
           }`}
         >
@@ -141,7 +141,7 @@ const App = () => {
         </button>
         <button
           onClick={() => setActiveSection("expired")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
             activeSection === "expired" ? "bg-pink-800 text-white" : ""
           }`}
         >
@@ -149,7 +149,7 @@ const App = () => {
         </button>
         <button
           onClick={() => setActiveSection("form")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all hover:bg-pink-700 ${
+          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
             activeSection === "form" ? "bg-pink-800 text-white" : ""
           }`}
         >
@@ -180,15 +180,16 @@ const App = () => {
             <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
+                <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+                    Item Name
+                  </th>
                   <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
                     Invoice No
                   </th>
                   <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
                     Date
                   </th>
-                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
-                    Item Name
-                  </th>
+                  
                   <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
                     Price
                   </th>
@@ -212,22 +213,35 @@ const App = () => {
                   .map((invoice) => (
                     <tr
                       key={invoice._id}
-                      className={
+                      className={`${
                         isExpiredOrAboutToExpire(invoice.expiryDate)
                           ? "bg-red-600 text-white border-2"
-                          : ""
-                      }
+                          : "hover:bg-pink-200"
+                      } transition-all duration-300`}
                     >
-                      <td className="py-2 px-2 text-center ">{invoice.invoiceNumber}</td>
-                      <td className="py-2 px-2 text-center ">{formatDate(invoice.invoiceDate)}</td>
-                      <td className="py-2 px-2 text-center ">{invoice.itemName}</td>
-                      <td className="py-2 px-2 text-center ">{`₹${invoice.price}`}</td>
-                      <td className="py-2 px-2 text-center ">{formatDate(invoice.expiryDate)}</td>
+                      <td className="py-2 px-2 text-center ">
+                        {invoice.itemName}
+                      </td>
+                      <td className="py-2 px-2 text-center ">
+                        {invoice.invoiceNumber}
+                      </td>
+                      <td className="py-2 px-2 text-center ">
+                        {formatDate(invoice.invoiceDate)}
+                      </td>
+                      
+                      <td className="py-2 px-2 text-center ">
+                        ₹{invoice.price}
+                      </td>
+                      <td className="py-2 px-2 text-center ">
+                        {formatDate(invoice.expiryDate)}
+                      </td>
                       <td className="py-2 px-2 text-center flex space-x-2">
                         <button
                           onClick={() => toggleDoneStatus(invoice._id)}
                           className={`px-4 py-2 text-white font-semibold rounded-md ${
-                            invoice.done ? "bg-green-600 hover:bg-green-700" : "bg-[#a8a29e] hover:bg-red-700"
+                            invoice.done
+                              ? "bg-green-600 hover:bg-green-700"
+                              : "bg-[#a8a29e] hover:bg-red-700"
                           }`}
                         >
                           {invoice.done ? "Done" : "Pending"}
@@ -352,7 +366,7 @@ const App = () => {
               </div>
               <button
                 type="submit"
-                className="w-full py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 focus:outline-none"
+                className="w-full py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 focus:outline-none transition-all duration-300"
               >
                 Add Invoice
               </button>
