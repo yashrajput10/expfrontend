@@ -12,7 +12,7 @@ const localizer = momentLocalizer(moment);
 
 const App = () => {
   const [invoices, setInvoices] = useState([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(""); // Already defined
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: "",
     invoiceDate: "",
@@ -162,6 +162,19 @@ const App = () => {
           EXP STOCK MANAGEMENT
         </h1>
 
+        {/* Add Search Bar Here */}
+        {activeSection === "table" && (
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search invoices..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-40 items-end hover:w-52 p-2 bg-white border rounded-xl border-pink-200 focus:outline-none focus:ring-1 focus:ring-pink-400"
+            />
+          </div>
+        )}
+
         {activeSection === "table" && (
           <div className="bg-white shadow-lg p-2  max-h-136 overflow-y-auto border border-gray-100">
             <table className="w-full border-collapse text-left">
@@ -205,28 +218,16 @@ const App = () => {
                           : ""
                       }
                     >
-                      <td className="py-2 px-2 text-center ">
-                        {invoice.invoiceNumber}
-                      </td>
-                      <td className="py-2 px-2 text-center ">
-                        {formatDate(invoice.invoiceDate)}
-                      </td>
-                      <td className="py-2 px-2 text-center ">
-                        {invoice.itemName}
-                      </td>
-                      <td className="py-2 px-2 text-center ">
-                        ₹{invoice.price}
-                      </td>
-                      <td className="py-2 px-2 text-center ">
-                        {formatDate(invoice.expiryDate)}
-                      </td>
-                      <td className="py-2 px-2 text-center  flex space-x-2">
+                      <td className="py-2 px-2 text-center ">{invoice.invoiceNumber}</td>
+                      <td className="py-2 px-2 text-center ">{formatDate(invoice.invoiceDate)}</td>
+                      <td className="py-2 px-2 text-center ">{invoice.itemName}</td>
+                      <td className="py-2 px-2 text-center ">{`₹${invoice.price}`}</td>
+                      <td className="py-2 px-2 text-center ">{formatDate(invoice.expiryDate)}</td>
+                      <td className="py-2 px-2 text-center flex space-x-2">
                         <button
                           onClick={() => toggleDoneStatus(invoice._id)}
                           className={`px-4 py-2 text-white font-semibold rounded-md ${
-                            invoice.done
-                              ? "bg-green-600 hover:bg-green-700"
-                              : "bg-[#a8a29e] hover:bg-red-700"
+                            invoice.done ? "bg-green-600 hover:bg-green-700" : "bg-[#a8a29e] hover:bg-red-700"
                           }`}
                         >
                           {invoice.done ? "Done" : "Pending"}
@@ -263,7 +264,7 @@ const App = () => {
         )}
 
         {activeSection === "expired" && (
-          <div className="bg-white mb-14 shadow-lg  p-6">
+          <div className="bg-white mb-14 shadow-lg p-6">
             <h2 className="text-l font-bold text-white mb-4">
               Expired Invoice Price Trends
             </h2>
