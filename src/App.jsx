@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Bar } from "react-chartjs-2";
+import { FaCalendarAlt } from "react-icons/fa";
 import { Chart as ChartJS } from "chart.js/auto";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css"; // Calendar styles
-import { ToastContainer, toast } from "react-toastify"; // Import Toastify
-import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
+import "react-big-calendar/lib/css/react-big-calendar.css"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const localizer = momentLocalizer(moment);
 
 const App = () => {
   const [invoices, setInvoices] = useState([]);
-  const [search, setSearch] = useState(""); // Already defined
+  const [search, setSearch] = useState(""); 
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: "",
     invoiceDate: "",
@@ -119,286 +120,302 @@ const App = () => {
 
   return (
     <>
-    <div class="spinner"></div>
-    <div className="flex flex-wrap justify-between p-5 bg-white gap-6 max-w-7xl mx-auto">
-      <div className="bg-pink-400 text-white p-4 w-64  shadow-lg transition-all flex-shrink-0">
-        <h2 className="text-xl font-semibold text-center mb-4 tracking-wider">
-          EXP Stock
-        </h2>
-        <button
-          onClick={() => setActiveSection("form")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
-            activeSection === "form" ? "bg-pink-800 text-white" : ""
-          }`}
-        >
-          Add Invoice
-        </button>
-        <button
-          onClick={() => setActiveSection("table")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
-            activeSection === "table" ? "bg-pink-800 text-white" : ""
-          }`}
-        >
-          View Invoices
-        </button>
-        <button
-          onClick={() => setActiveSection("chart")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black  rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
-            activeSection === "chart" ? "bg-pink-800 text-white" : ""
-          }`}
-        >
-          Invoice Price Trends
-        </button>
-        <button
-          onClick={() => setActiveSection("expired")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
-            activeSection === "expired" ? "bg-pink-800 text-white" : ""
-          }`}
-        >
-          Expired Invoice Chart
-        </button>
-        
-        <button
-          onClick={() => setActiveSection("calendar")}
-          className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
-            activeSection === "calendar" ? "bg-pink-800 text-white" : ""
-          }`}
-        >
-          Expiry Calendar
-        </button>
-      </div>
-      <div className="flex-grow p-6 max-w-4xl box-border animation-fadeIn bg-pink-400">
-        <h1 className="text-2xl font-extrabold text-white mb-6 text-center">
-          EXP STOCK MANAGEMENT
-        </h1>
+      <div className="flex flex-wrap justify-between p-5 bg-white gap-6 max-w-7xl mx-auto">
+        <div className="bg-pink-400 text-white p-4 w-64 shadow-lg transition-all flex-shrink-0">
+          <h2 className="text-xl font-semibold text-center mb-4 tracking-wider">
+            EXP Stock
+          </h2>
+          <button
+            onClick={() => setActiveSection("form")}
+            className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
+              activeSection === "form" ? "bg-pink-800 text-white" : ""
+            }`}
+          >
+            Add Invoice
+            <i className="fas fa-plus-circle ml-2"></i>
+            
+          </button>
+          <button
+            onClick={() => setActiveSection("table")}
+            className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
+              activeSection === "table" ? "bg-pink-800 text-white" : ""
+            }`}
+          >
+            View Invoices
+            <i className="fas fa-table ml-2"></i>
+          </button>
+          <button
+            onClick={() => setActiveSection("chart")}
+            className={`p-3 mb-4 w-full bg-pink-200 text-black  rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
+              activeSection === "chart" ? "bg-pink-800 text-white" : ""
+            }`}
+          >
+            Invoice Price Trends
+            <i className="fas fa-chart-line ml-2"></i>
+          </button>
+          <button
+            onClick={() => setActiveSection("expired")}
+            className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
+              activeSection === "expired" ? "bg-pink-800 text-white" : ""
+            }`}
+          >
+            Exp Invoice Chart
+            <i className="fas fa-calendar-times ml-2"></i>
+          </button>
 
-        {activeSection === "table" && (
-          <div className="mb-4">
+          <button
+            onClick={() => setActiveSection("calendar")}
+            className={`p-3 mb-4 w-full bg-pink-200 text-black rounded-l cursor-pointer border-none transition-all duration-300 ease-in-out hover:bg-pink-700 hover:text-white ${
+              activeSection === "calendar" ? "bg-pink-800 text-white" : ""
+            }`}
+          >
+            Exp Calendar
+            <i className="fas fa-calendar-alt ml-2"></i>
+          </button>
+        </div>
+        <div className="flex-grow p-6 max-w-4xl box-border animation-fadeIn bg-pink-400">
+          <h1 className="text-2xl font-extrabold text-white mb-6 text-center">
+            EXP STOCK MANAGEMENT
+          </h1>
+
+          {activeSection === "table" && (
+            <div className="mb-4 relative">
             <input
               type="text"
               placeholder="Search invoices..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-40 items-end hover:w-52 p-2 bg-white border rounded-xl border-pink-200 focus:outline-none focus:ring-1 focus:ring-pink-400"
+              className="w-40 items-end hover:w-52 p-2 pl-10 bg-white border rounded-xl border-pink-200 focus:outline-none focus:ring-1 focus:ring-pink-400"
             />
+            <i className="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-pink-400"></i>
           </div>
-        )}
+          
+          )}
 
-        {activeSection === "table" && (
-          <div className="bg-white shadow-lg p-2  max-h-136 overflow-y-auto border border-gray-100">
-            <table className="w-full border-collapse text-left">
-              <thead>
-                <tr>
-                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
-                    Item Name
-                  </th>
-                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
-                    Invoice No
-                  </th>
-                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
-                    Date
-                  </th>
-                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
-                    Price
-                  </th>
-                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
+          {activeSection === "table" && (
+            <div className="bg-white shadow-lg p-2  max-h-136 overflow-y-auto border border-gray-100">
+              <table className="w-full border-collapse text-left">
+                <thead>
+                  <tr className="text-center">
+                    <th className="p-3 bg-pink-500 text-white font-bold uppercase border-b-2">
+                      Item Name
+                    </th>
+                    <th className="p-3  bg-pink-500 text-white font-bold uppercase border-b-2">
+                      Invoice No
+                    </th>
+                    <th className="p-3 bg-pink-500 text-white font-bold uppercase border-b-2">
+                      Date
+                    </th>
+                    <th className="p-3 bg-pink-500 text-white font-bold uppercase border-b-2">
+                      Price
+                    </th>
+                    <th className="p-3 bg-pink-500 text-white font-bold uppercase border-b-2">
+                      Expiry Date
+                    </th>
+                    <th className="p-3 bg-pink-500 text-white font-bold uppercase border-b-2">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invoices
+                    .filter(
+                      (invoice) =>
+                        invoice.itemName
+                          .toLowerCase()
+                          .includes(search.toLowerCase()) ||
+                        invoice.invoiceDate.includes(search)
+                    )
+                    .map((invoice) => (
+                      <tr
+                        key={invoice._id}
+                        className={`${
+                          isExpiredOrAboutToExpire(invoice.expiryDate)
+                            ? "bg-red-600 text-white border-2"
+                            : "hover:bg-pink-200"
+                        } transition-all duration-300`}
+                      >
+                        <td className="py-2 px-2 text-center ">
+                          {invoice.itemName}
+                        </td>
+                        <td className="py-2 px-2 text-center ">
+                          {invoice.invoiceNumber}
+                        </td>
+                        <td className="py-2 px-2 text-center ">
+                          {formatDate(invoice.invoiceDate)}
+                        </td>
+                        <td className="py-2 px-2 text-center ">{`₹${invoice.price}`}</td>
+                        <td className="py-2 px-2 text-center ">
+                          {formatDate(invoice.expiryDate)}
+                        </td>
+                        <td className="py-2 px-2 text-center flex space-x-2">
+                          <button
+                            onClick={() => toggleDoneStatus(invoice._id)}
+                            className={`px-4 py-2 text-white font-semibold rounded-md ${
+                              invoice.done
+                                ? "bg-green-600 hover:bg-green-700"
+                                : "bg-[#a8a29e] hover:bg-red-700"
+                            }`}
+                          >
+                            {invoice.done ? "Done" : "Pending"}
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (
+                                window.confirm(
+                                  "Are you sure you want to delete this invoice?"
+                                )
+                              ) {
+                                deleteInvoice(invoice._id);
+                              }
+                            }}
+                            className="px-4 py-2 text-white font-semibold rounded-md bg-black hover:bg-gray-700"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {activeSection === "calendar" && (
+            <div className="bg-white shadow-lg p-6">
+              <h2 className="text-2xl font-bold text-pink-700 mb-4">
+                Invoice Expiry Calendar
+              </h2>
+              <Calendar
+                localizer={localizer}
+                events={invoices.map((invoice) => ({
+                  title: `${invoice.itemName} - ₹${invoice.price}`,
+                  start: new Date(invoice.expiryDate),
+                  end: new Date(invoice.expiryDate),
+                  allDay: true,
+                }))}
+                startAccessor="start"
+                endAccessor="end"
+                style={{ height: 500 }}
+              />
+            </div>
+          )}
+
+          {activeSection === "chart" && (
+            <div className="bg-white shadow-lg mb-12 p-6">
+              <h2 className="text-2xl font-bold text-pink-700 mb-4">
+                Invoice Price Trends
+              </h2>
+              <Bar data={chartData} />
+            </div>
+          )}
+
+          {activeSection === "expired" && (
+            <div className="bg-white mb-14 shadow-lg p-6">
+              <h2 className="text-l font-bold text-white mb-4">
+                Expired Invoice Price Trends
+              </h2>
+              <Bar data={chartDataExpired} />
+            </div>
+          )}
+
+          {activeSection === "form" && (
+            <div className="bg-white shadow-lg p-6 max-w-l mx-auto">
+              <form onSubmit={addInvoice}>
+                <h2 className="text-2xl font-bold text-pink-700">
+                  Add Invoice
+                </h2>
+                <div className="mb-2">
+                  <label className="block text-pink-700 mb-2">Invoice No</label>
+                  <input
+                    type="text"
+                    placeholder="Invoice Number"
+                    value={invoiceData.invoiceNumber}
+                    onChange={(e) =>
+                      setInvoiceData({
+                        ...invoiceData,
+                        invoiceNumber: e.target.value,
+                      })
+                    }
+                    required
+                    className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  />
+                </div>
+                <div className="mb-2">
+                  <label className="block text-pink-700 mb-2">
+                    Invoice Date
+                  </label>
+                  <input
+                    type="date"
+                    value={invoiceData.invoiceDate}
+                    onChange={(e) =>
+                      setInvoiceData({
+                        ...invoiceData,
+                        invoiceDate: e.target.value,
+                      })
+                    }
+                    required
+                    className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  />
+                </div>
+                <div className="mb-2">
+                  <label className="block text-pink-700 mb-2">Item Name</label>
+                  <input
+                    type="text"
+                    placeholder="Item Name"
+                    value={invoiceData.itemName}
+                    onChange={(e) =>
+                      setInvoiceData({
+                        ...invoiceData,
+                        itemName: e.target.value,
+                      })
+                    }
+                    required
+                    className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  />
+                </div>
+                <div className="mb-2">
+                  <label className="block text-pink-700 mb-2">Price</label>
+                  <input
+                    type="number"
+                    placeholder="Price"
+                    value={invoiceData.price}
+                    onChange={(e) =>
+                      setInvoiceData({ ...invoiceData, price: e.target.value })
+                    }
+                    required
+                    className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  />
+                </div>
+                <div className="mb-6">
+                  <label className="block text-pink-700 mb-2">
                     Expiry Date
-                  </th>
-                  <th className="py-4 px-6 bg-pink-500 text-white font-bold uppercase border-b-2">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {invoices
-                  .filter(
-                    (invoice) =>
-                      invoice.itemName
-                        .toLowerCase()
-                        .includes(search.toLowerCase()) ||
-                      invoice.invoiceDate.includes(search)
-                  )
-                  .map((invoice) => (
-                    <tr
-                      key={invoice._id}
-                      className={`${
-                        isExpiredOrAboutToExpire(invoice.expiryDate)
-                          ? "bg-red-600 text-white border-2"
-                          : "hover:bg-pink-200"
-                      } transition-all duration-300`}
-                    >
-                      <td className="py-2 px-2 text-center ">
-                        {invoice.itemName}
-                      </td>
-                      <td className="py-2 px-2 text-center ">
-                        {invoice.invoiceNumber}
-                      </td>
-                      <td className="py-2 px-2 text-center ">
-                        {formatDate(invoice.invoiceDate)}
-                      </td>
-                      <td className="py-2 px-2 text-center ">{`₹${invoice.price}`}</td>
-                      <td className="py-2 px-2 text-center ">
-                        {formatDate(invoice.expiryDate)}
-                      </td>
-                      <td className="py-2 px-2 text-center flex space-x-2">
-                        <button
-                          onClick={() => toggleDoneStatus(invoice._id)}
-                          className={`px-4 py-2 text-white font-semibold rounded-md ${
-                            invoice.done
-                              ? "bg-green-600 hover:bg-green-700"
-                              : "bg-[#a8a29e] hover:bg-red-700"
-                          }`}
-                        >
-                          {invoice.done ? "Done" : "Pending"}
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                "Are you sure you want to delete this invoice?"
-                              )
-                            ) {
-                              deleteInvoice(invoice._id);
-                            }
-                          }}
-                          className="px-4 py-2 text-white font-semibold rounded-md bg-black hover:bg-gray-700"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {activeSection === "calendar" && (
-          <div className="bg-white shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-pink-700 mb-4">
-              Invoice Expiry Calendar
-            </h2>
-            <Calendar
-              localizer={localizer}
-              events={invoices.map((invoice) => ({
-                title: `${invoice.itemName} - ₹${invoice.price}`,
-                start: new Date(invoice.expiryDate),
-                end: new Date(invoice.expiryDate),
-                allDay: true,
-              }))}
-              startAccessor="start"
-              endAccessor="end"
-              style={{ height: 500 }}
-            />
-          </div>
-        )}
-
-        {activeSection === "chart" && (
-          <div className="bg-white shadow-lg mb-12 p-6">
-            <h2 className="text-2xl font-bold text-pink-700 mb-4">
-              Invoice Price Trends
-            </h2>
-            <Bar data={chartData} />
-          </div>
-        )}
-
-        {activeSection === "expired" && (
-          <div className="bg-white mb-14 shadow-lg p-6">
-            <h2 className="text-l font-bold text-white mb-4">
-              Expired Invoice Price Trends
-            </h2>
-            <Bar data={chartDataExpired} />
-          </div>
-        )}
-
-        {activeSection === "form" && (
-          <div className="bg-white shadow-lg p-6 max-w-l mx-auto">
-            <form onSubmit={addInvoice}>
-              <h2 className="text-2xl font-bold text-pink-700">Add Invoice</h2>
-              <div className="mb-2">
-                <label className="block text-pink-700 mb-2">Invoice No</label>
-                <input
-                  type="text"
-                  placeholder="Invoice Number"
-                  value={invoiceData.invoiceNumber}
-                  onChange={(e) =>
-                    setInvoiceData({
-                      ...invoiceData,
-                      invoiceNumber: e.target.value,
-                    })
-                  }
-                  required
-                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                />
-              </div>
-              <div className="mb-2">
-                <label className="block text-pink-700 mb-2">Invoice Date</label>
-                <input
-                  type="date"
-                  value={invoiceData.invoiceDate}
-                  onChange={(e) =>
-                    setInvoiceData({
-                      ...invoiceData,
-                      invoiceDate: e.target.value,
-                    })
-                  }
-                  required
-                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                />
-              </div>
-              <div className="mb-2">
-                <label className="block text-pink-700 mb-2">Item Name</label>
-                <input
-                  type="text"
-                  placeholder="Item Name"
-                  value={invoiceData.itemName}
-                  onChange={(e) =>
-                    setInvoiceData({ ...invoiceData, itemName: e.target.value })
-                  }
-                  required
-                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                />
-              </div>
-              <div className="mb-2">
-                <label className="block text-pink-700 mb-2">Price</label>
-                <input
-                  type="number"
-                  placeholder="Price"
-                  value={invoiceData.price}
-                  onChange={(e) =>
-                    setInvoiceData({ ...invoiceData, price: e.target.value })
-                  }
-                  required
-                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                />
-              </div>
-              <div className="mb-6">
-                <label className="block text-pink-700 mb-2">Expiry Date</label>
-                <input
-                  type="date"
-                  value={invoiceData.expiryDate}
-                  onChange={(e) =>
-                    setInvoiceData({
-                      ...invoiceData,
-                      expiryDate: e.target.value,
-                    })
-                  }
-                  required
-                  className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 focus:outline-none transition-all duration-300"
-              >
-                Add Invoice
-              </button>
-            </form>
-          </div>
-        )}
+                  </label>
+                  <input
+                    type="date"
+                    value={invoiceData.expiryDate}
+                    onChange={(e) =>
+                      setInvoiceData({
+                        ...invoiceData,
+                        expiryDate: e.target.value,
+                      })
+                    }
+                    required
+                    className="w-full p-2 border rounded-xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600 focus:outline-none transition-all duration-300"
+                >
+                  Add Invoice
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+        <ToastContainer /> {/* Toastify Container */}
       </div>
-      <ToastContainer /> {/* Toastify Container */}
-    </div>
     </>
   );
 };
