@@ -5,7 +5,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { Chart as ChartJS } from "chart.js/auto";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css"; 
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,7 +13,7 @@ const localizer = momentLocalizer(moment);
 
 const App = () => {
   const [invoices, setInvoices] = useState([]);
-  const [search, setSearch] = useState(""); 
+  const [search, setSearch] = useState("");
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: "",
     invoiceDate: "",
@@ -133,7 +133,6 @@ const App = () => {
           >
             Add Invoice
             <i className="fas fa-plus-circle ml-2"></i>
-            
           </button>
           <button
             onClick={() => setActiveSection("table")}
@@ -180,16 +179,15 @@ const App = () => {
 
           {activeSection === "table" && (
             <div className="mb-4 relative">
-            <input
-              type="text"
-              placeholder="Search invoices..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-40 items-end hover:w-52 p-2 pl-10 bg-white border rounded-xl border-pink-200 focus:outline-none focus:ring-1 focus:ring-pink-400"
-            />
-            <i className="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-pink-400"></i>
-          </div>
-          
+              <input
+                type="text"
+                placeholder="Search invoices..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-40 items-end hover:w-52 p-2 pl-10 bg-white border rounded-xl border-pink-200 focus:outline-none focus:ring-1 focus:ring-pink-400"
+              />
+              <i className="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-pink-400"></i>
+            </div>
           )}
 
           {activeSection === "table" && (
@@ -226,6 +224,12 @@ const App = () => {
                           .includes(search.toLowerCase()) ||
                         invoice.invoiceDate.includes(search)
                     )
+                    .sort((a, b) => {
+                      // Move done invoices to the end
+                      if (a.done && !b.done) return 1;
+                      if (!a.done && b.done) return -1;
+                      return 0;
+                    })
                     .map((invoice) => (
                       <tr
                         key={invoice._id}
